@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary layouts</title>
+<style>
+  :root {
+    --bg: oklch(0.972 0.008 80);
+    --card: oklch(0.993 0.004 85);
+    --sunk: oklch(0.955 0.01 80);
+    --line: oklch(0.90 0.012 80);
+    --ink: oklch(0.22 0.012 60);
+    --mute: oklch(0.48 0.015 60);
+    --primary: oklch(0.24 0.012 60);
+    --on-primary: oklch(0.98 0.006 85);
+    --acc: oklch(0.52 0.15 38);
+    --acc-soft: oklch(0.945 0.03 45);
+    --shadow: 0 1px 2px oklch(0.3 0.03 60 / .05), 0 6px 20px oklch(0.3 0.03 60 / .05);
+    --serif: "Iowan Old Style", Charter, Cambria, Georgia, serif;
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: oklch(0.18 0.008 60);
+    --card: oklch(0.215 0.009 60);
+    --sunk: oklch(0.195 0.008 60);
+    --line: oklch(0.31 0.01 60);
+    --ink: oklch(0.93 0.01 80);
+    --mute: oklch(0.71 0.013 70);
+    --primary: oklch(0.92 0.01 80);
+    --on-primary: oklch(0.19 0.008 60);
+    --acc: oklch(0.76 0.12 45);
+    --acc-soft: oklch(0.30 0.05 42);
+    --shadow: 0 1px 2px oklch(0 0 0 / .3);
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--acc-soft);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 2px;
+  }
+
+  svg.i {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+  }
+
+  .mute {
+    color: var(--mute);
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  input,
+  button {
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    height: 34px;
+    padding: 0 10px;
+  }
+
+  input::placeholder {
+    color: var(--mute);
+  }
+
+  button {
+    cursor: pointer;
+    font-weight: 550;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+
+  button:hover {
+    background: var(--sunk);
+  }
+
+  button.quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--mute);
+    padding: 0 8px;
+  }
+
+  button.quiet:hover {
+    color: var(--ink);
+    background: var(--sunk);
+  }
+
+  button.primary {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: transparent;
+  }
+
+  button.primary:hover {
+    filter: brightness(1.12);
+    background: var(--primary);
+  }
+
+  /* review bar: not part of the design */
+  .review {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 8px 20px;
+    background: oklch(0.26 0.02 260);
+    color: oklch(0.95 0.01 260);
+    font-size: 13px;
+  }
+
+  .review b {
+    font-weight: 600;
+  }
+
+  .review .seg {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 10px;
+    background: oklch(0.33 0.02 260);
+  }
+
+  .review .seg button {
+    height: 28px;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 12.5px;
+    border-radius: 8px;
+  }
+
+  .review .seg button[aria-pressed=true] {
+    background: oklch(0.95 0.01 260);
+    color: oklch(0.22 0.02 260);
+  }
+
+  .review .note {
+    opacity: .75;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  @media (max-width:700px) {
+    .review {
+      position: static;
+    }
+
+    .review .note {
+      display: none;
+    }
+  }
+
+  /* dashboard chrome, trimmed */
+  header.top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  .brand {
+    font: 500 20px/1 var(--serif);
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 284px minmax(0, 1fr);
+    min-height: calc(100vh - 100px);
+  }
+
+  nav.rail {
+    border-right: 1px solid var(--line);
+    padding: 14px 10px;
+  }
+
+  .sect {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--mute);
+    margin: 12px 6px 4px 12px;
+  }
+
+  .rec {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 9px;
+    font-size: 13.5px;
+  }
+
+  .rec.sel {
+    background: var(--card);
+    box-shadow: var(--shadow);
+    outline: 1px solid var(--line);
+  }
+
+  .rec small {
+    display: block;
+    color: var(--mute);
+    font-size: 12px;
+  }
+
+  .view {
+    padding: 24px 36px 80px;
+    min-width: 0;
+  }
+
+  h1 {
+    font: 500 26px/1.25 var(--serif);
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    color: var(--mute);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid var(--line);
+    margin: 22px 0 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    margin-bottom: -1px;
+    background: none;
+    color: var(--mute);
+    height: auto;
+  }
+
+  .tab:hover {
+    background: none;
+    color: var(--ink);
+  }
+
+  .tab[aria-selected=true] {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .tab .c {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--mute);
+  }
+
+  .panel {
+    padding-top: 22px;
+  }
+
+  @media (max-width:860px) {
+    .shell {
+      display: block;
+    }
+
+    nav.rail {
+      display: none;
+    }
+
+    .view {
+      padding: 18px 16px 80px;
+    }
+  }
+
+  /* shared glossary pieces */
+  .g-intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-bottom: 26px;
+  }
+
+  .g-intro p {
+    margin: 0;
+    flex: 1;
+    min-width: 260px;
+    color: var(--mute);
+    max-width: 70ch;
+  }
+
+  .add {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 0 1 380px;
+    min-width: 240px;
+  }
+
+  .add input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .add .errmsg {
+    flex-basis: 100%;
+    font-size: 12px;
+    color: var(--acc);
+  }
+
+  .add .errmsg:empty {
+    display: none;
+  }
+
+  .add input[aria-invalid=true] {
+    border-color: var(--acc);
+  }
+
+  .scope-h {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 4px;
+    font: 500 19px/1.3 var(--serif);
+  }
+
+  .scope-h .num {
+    font: 400 13px/1 inherit;
+    font-family: inherit;
+    color: var(--mute);
+  }
+
+  .scope-p {
+    margin: 0 0 14px;
+    color: var(--mute);
+    font-size: 13px;
+  }
+
+  .grp-h {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mute);
+    margin: 0;
+  }
+
+  .grp-h .n {
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grp-p {
+    margin: 2px 0 8px;
+    font-size: 12.5px;
+    color: var(--mute);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .dot.active {
+    background: var(--ink);
+  }
+
+  .dot.waiting {
+    border: 1.5px solid var(--mute);
+  }
+
+  .dot.blocked {
+    background: var(--line);
+  }
+
+  .tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--mute);
+    background: var(--sunk);
+    border-radius: 99px;
+    padding: 1px 7px;
+    white-space: nowrap;
+  }
+
+  .tag.acc {
+    color: var(--acc);
+    background: var(--acc-soft);
+  }
+
+  .empty {
+    color: var(--mute);
+    font-size: 13px;
+    padding: 8px 0;
+  }
+
+  .ib {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .review .seg button {
+    transition: none;
+  }
+
+  .act {
+    display: flex;
+    gap: 2px;
+    flex: none;
+  }
+
+  .flash {
+    animation: flash 1.2s ease-out;
+  }
+
+  @keyframes flash {
+    from {
+      background: var(--acc-soft);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flash {
+      animation: none;
+    }
+  }
+
+  /* A: two columns of rows */
+  .A {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 0 56px;
+  }
+
+  .A section+section {
+    border-left: 1px solid var(--line);
+    padding-left: 56px;
+  }
+
+  .A .grp {
+    margin-bottom: 26px;
+  }
+
+  .A .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 4px 6px 4px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .A .row:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .A .w {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+  }
+
+  .A .w b {
+    font-weight: 550;
+    overflow-wrap: anywhere;
+  }
+
+  .A .w span {
+    font-size: 12.5px;
+    color: var(--mute);
+  }
+
+  .A .row.blocked b {
+    color: var(--mute);
+    font-weight: 400;
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+  }
+
+  @media (max-width:1100px) {
+    .A {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .A section+section {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--line);
+      padding-top: 26px;
+    }
+  }
+
+  /* B: chip board */
+  .B section {
+    margin-bottom: 34px;
+  }
+
+  .B .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .B .grp {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 14px 16px;
+  }
+
+  .B .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 4px 0 11px;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    font-weight: 550;
+    font-size: 13.5px;
+    max-width: 100%;
+  }
+
+  .chip>span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chip .cnt {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+    margin-left: 2px;
+  }
+
+  .chip.waiting {
+    border-style: dashed;
+    border-color: color-mix(in oklch, var(--mute) 55%, var(--line));
+    background: transparent;
+  }
+
+  .chip.blocked {
+    background: transparent;
+    color: var(--mute);
+    font-weight: 400;
+  }
+
+  .chip.blocked>span:first-child {
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+  }
+
+  .chip button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 99px;
+    background: none;
+    color: var(--mute);
+    justify-content: center;
+  }
+
+  .chip button:hover {
+    background: var(--sunk);
+    color: var(--ink);
+  }
+
+  .chip button svg.i {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* C: one list with filters */
+  .C .bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .C .filters {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--sunk);
+    border-radius: 11px;
+  }
+
+  .C .filters button {
+    height: 30px;
+    border: 0;
+    background: none;
+    color: var(--mute);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .C .filters button[aria-pressed=true] {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+  }
+
+  .C .find {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 1 240px;
+    min-width: 160px;
+    background: var(--sunk);
+    border-radius: 9px;
+    padding: 0 4px 0 10px;
+    color: var(--mute);
+  }
+
+  .C .find input {
+    border: 0;
+    background: none;
+    flex: 1;
+    min-width: 0;
+    padding: 0 4px;
+  }
+
+  .C .find input:focus {
+    outline: none;
+  }
+
+  .C .list {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    overflow: hidden;
+  }
+
+  .C .gh {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+    padding: 16px 18px 6px;
+    border-top: 1px solid var(--line);
+  }
+
+  .C .gh:first-child {
+    border-top: 0;
+  }
+
+  .C .gh .scope {
+    font: 500 15px/1.3 var(--serif);
+  }
+
+  .C .gh .grp-p {
+    margin: 0;
+  }
+
+  .C .row {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 0 10px 0 18px;
+    min-height: 46px;
+  }
+
+  .C .row:hover {
+    background: var(--bg);
+  }
+
+  .C .row b {
+    font-weight: 550;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .C .row .c2,
+  .C .row .c3 {
+    font-size: 12.5px;
+    color: var(--mute);
+  }
+
+  .C .row.blocked b {
+    color: var(--mute);
+    font-weight: 400;
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+  }
+
+  @media (max-width:700px) {
+    .C .row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 8px 8px 8px 14px;
+    }
+
+    .C .row .c2 {
+      grid-column: 1;
+      grid-row: 2;
+      padding-left: 16px;
+    }
+
+    .C .gh .grp-p {
+      flex-basis: 100%;
+    }
+
+    .C .row .c3 {
+      display: none;
+    }
+
+    .C .row .act {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: var(--on-primary);
+    box-shadow: var(--shadow);
+    font-size: 13.5px;
+    z-index: 40;
+    max-width: calc(100vw - 32px);
+  }
+
+  .toast[hidden] {
+    display: none;
+  }
+
+  .toast button {
+    background: none;
+    border-color: transparent;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .toast button:hover {
+    background: none;
+  }
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" />
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24">
+    <path d="M6 6l12 12M18 6L6 18" />
+  </symbol>
+  <symbol id="i-up" viewBox="0 0 24 24">
+    <path d="M12 19V5M6 11l6-6 6 6" />
+  </symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24">
+    <path d="M4 9h11a5 5 0 010 10H9" />
+    <path d="M8 5L4 9l4 4" />
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6" />
+    <path d="M20 20l-4.5-4.5" />
+  </symbol>
+  <symbol id="i-book" viewBox="0 0 24 24">
+    <path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z" />
+    <path d="M5 17a3 3 0 013-3h10" />
+  </symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24">
+    <path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 11v2" />
+  </symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24">
+    <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+  </symbol>
+</svg>
+
+<div class="review" role="region" aria-label="Review controls">
+  <b>Glossary layout</b>
+  <div class="seg" id="opts">
+    <button data-o="A" aria-pressed="true">A · Two columns</button>
+    <button data-o="B" aria-pressed="false">B · Word chips</button>
+    <button data-o="C" aria-pressed="false">C · One list</button>
+  </div>
+  <div class="seg" id="themes">
+    <button data-t="light" aria-pressed="true">Light</button>
+    <button data-t="dark" aria-pressed="false">Dark</button>
+  </div>
+  <span class="note">Every button works on sample data. Nothing here touches your vault.</span>
+</div>
+
+<header class="top"><span class="brand">Plaud</span></header>
+<div class="shell">
+  <nav class="rail" aria-label="Recordings">
+    <div class="sect">TESI</div>
+    <div class="rec sel">Optimal transport for SLM holograms<small>11 Nov · 48 min</small></div>
+    <div class="rec">Weekly check-in with Samuele<small>27 Oct · 31 min</small></div>
+    <div class="rec">Gerchberg–Saxton baseline<small>17 Oct · 22 min</small></div>
+    <div class="sect">Research</div>
+    <div class="rec sel">Latency optimization for streaming ASR<small>11 Nov · 48 min</small></div>
+    <div class="rec">Weekly check-in with Samir<small>27 Oct · 31 min</small></div>
+    <div class="rec">Diarization threshold baseline<small>17 Oct · 22 min</small></div>
+    <div class="sect">Inbox</div>
+    <div class="rec">Voice memo<small>20 Nov · 3 min</small></div>
+  </nav>
+  <main class="view">
+    <h1>Optimal transport for SLM holograms</h1>
+    <div class="meta num"><span>2026-11-11 · 48 min</span><span
+        style="display:inline-flex;gap:5px;align-items:center"><svg class="i">
+          <use href="#i-folder" />
+        </svg>TESI</span><span>it</span></div>
+    <h1>Latency optimization for streaming ASR</h1>
+    <div class="meta num"><span>2026-11-11 · 48 min</span><span
+        style="display:inline-flex;gap:5px;align-items:center"><svg class="i">
+          <use href="#i-folder" />
+        </svg>Research</span><span>en</span></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="false"><svg class="i">
+          <use href="#i-wave" />
+        </svg>Transcript</button>
+      <button class="tab" role="tab" aria-selected="true"><svg class="i">
+          <use href="#i-book" />
+        </svg>Glossary <span class="c" id="tabcount"></span></button>
+      <button class="tab" role="tab" aria-selected="false">Meeting notes</button>
+    </div>
+    <div class="panel" id="panel"></div>
+  </main>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+  const FOLDER = "TESI";
+  const FOLDER = "Research";
+  let words = [
+    { t: "Flavio Di Lorenzo", s: "active", here: "heard", src: "speaker", recs: 3, said: 14 },
+    { t: "FFT", s: "active", here: "heard", recs: 2, said: 6 },
+    { t: "Optimal Transport (OT)", s: "active", here: "heard", src: "yours", recs: 1, said: 3 },
+    { t: "SLM", s: "active", here: "heard", recs: 2, said: 9 },
+    { t: "Sinkhorn", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "Kantorovich", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "Wasserstein distance", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "Davide Gadioli", s: "active", here: "added", src: "speaker", recs: 1 },
+    { t: "MRAF", s: "active", here: "added", src: "yours", recs: 1 },
+    { t: "Samuele Trezzi", s: "active", src: "speaker", recs: 2, last: "27 Oct" },
+    { t: "Alice Mercer", s: "active", here: "heard", src: "speaker", recs: 3, said: 14 },
+    { t: "CUDA", s: "active", here: "heard", recs: 2, said: 6 },
+    { t: "Silero VAD", s: "active", here: "heard", src: "yours", recs: 1, said: 3 },
+    { t: "FastAPI", s: "active", here: "heard", recs: 2, said: 9 },
+    { t: "Parakeet", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "ONNX Runtime", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "PyAV", s: "waiting", here: "new", recs: 1, said: 2 },
+    { t: "David Kim", s: "active", here: "added", src: "speaker", recs: 1 },
+    { t: "OKLCH", s: "active", here: "added", src: "yours", recs: 1 },
+    { t: "Samir Patel", s: "active", src: "speaker", recs: 2, last: "27 Oct" },
+    { t: "Transformer", s: "active", recs: 2, last: "27 Oct" },
+    { t: "Giovanni Pellegrini", s: "active", src: "speaker", recs: 1, last: "17 Oct" },
+    { t: "Zernike", s: "active", recs: 3, last: "17 Oct" },
+    { t: "Fresnel", s: "active", src: "yours", recs: 1, last: "9 Oct" },
+    { t: "Speckle", s: "waiting", recs: 1, last: "27 Oct" },
+    { t: "Gerchberg–Saxton", s: "waiting", recs: 1, last: "17 Oct" },
+    { t: "LCoS", s: "waiting", recs: 1, last: "17 Oct" },
+    { t: "Walsh", s: "blocked", prev: "waiting", recs: 1, last: "9 Oct" },
+    { t: "Elena Vance", s: "active", src: "speaker", recs: 1, last: "17 Oct" },
+    { t: "pyannote", s: "active", recs: 3, last: "17 Oct" },
+    { t: "faster-whisper", s: "active", src: "yours", recs: 1, last: "9 Oct" },
+    { t: "Cosine threshold", s: "waiting", recs: 1, last: "27 Oct" },
+    { t: "Levenshtein", s: "waiting", recs: 1, last: "17 Oct" },
+    { t: "Hotwords", s: "waiting", recs: 1, last: "17 Oct" },
+    { t: "LegacyTerm", s: "blocked", prev: "waiting", recs: 1, last: "9 Oct" },
+  ];
+  const GROUPS = [
+    { id: "new", scope: "here", name: "New", dot: "waiting", desc: "Found in this recording. Waiting for a second recording, or for you." },
+    { id: "heard", scope: "here", name: "Heard", dot: "active", desc: "Glossary words said in this recording." },
+    { id: "added", scope: "here", name: "Added by you", dot: "active", desc: "Typed, speaker names and fixes. Active at once, from the next transcription." },
+    { id: "active", scope: "rest", name: "Active", dot: "active", desc: "Sent to every transcription in " + FOLDER + "." },
+    { id: "waiting", scope: "rest", name: "Waiting", dot: "waiting", desc: "Seen in one recording so far." },
+    { id: "blocked", scope: "rest", name: "Blocked", dot: "blocked", desc: "Never added again. Remove here deletes for good." },
+  ];
+  const groupOf = w => w.s === "blocked" ? "blocked"
+    : w.here === "added" ? "added"
+      : w.here === "new" && w.s === "waiting" ? "new"
+        : w.here && w.s === "active" ? "heard"
+          : w.s;
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const ic = n => `<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+  function meta(w) {
+    const g = groupOf(w), bits = [];
+    if (g === "heard") bits.push(`said ${w.said || 1}×`, plural(w.recs, "recording"));
+    else if (g === "new") bits.push("first seen here");
+    else if (g === "added") bits.push("from the next transcription");
+    else if (g === "blocked") bits.push(w.prev === "active" ? "was active" : "was waiting");
+    else bits.push(plural(w.recs, "recording"), "last " + w.last);
+    return bits;
+  }
+  const tags = w => w.src === "speaker" ? `<span class="tag">speaker</span>` : w.src === "yours" ? `<span class="tag">yours</span>` : "";
+  function actions(w, compact) {
+    const g = groupOf(w), b = [];
+    const k = esc(w.t);
+    if (w.s === "waiting") b.push(compact ? `<button data-use="${k}" title="Use now" aria-label="Use ${k} now">${ic("up")}</button>` : `<button class="quiet" data-use="${k}">${ic("up")}Use now</button>`);
+    if (g === "blocked") b.push(compact ? `<button data-restore="${k}" title="Restore" aria-label="Restore ${k}">${ic("undo")}</button>` : `<button class="quiet" data-restore="${k}">${ic("undo")}Restore</button>`);
+    b.push(compact ? `<button data-remove="${k}" title="${g === "blocked" ? "Remove for good" : "Remove"}" aria-label="Remove ${k}">${ic("x")}</button>`
+      : `<button class="quiet ib" data-remove="${k}" title="${g === "blocked" ? "Remove for good" : "Remove"}" aria-label="Remove ${k}">${ic("x")}</button>`);
+    return b.join("");
+  }
+  const inGroup = id => words.filter(w => groupOf(w) === id);
+  const addBox = () => `<form class="add" id="addform" novalidate><input id="addin" placeholder="Add a word for ${FOLDER}" aria-label="Add a word" autocomplete="off"><button class="primary" type="submit">${ic("plus")}Add</button><span class="errmsg" id="adderr" role="alert"></span></form>`;
+  const intro = () => `<div class="g-intro"><p>Words the transcriber should spell right in <b style="color:var(--ink);font-weight:550">${FOLDER}</b>. Each word shows once: here if this recording uses it, below if it only belongs to the folder.</p>${addBox()}</div>`;
+  const scopeHead = (id) => {
+    const ids = GROUPS.filter(g => g.scope === id).map(g => g.id);
+    const n = words.filter(w => ids.includes(groupOf(w))).length;
+    return id === "here" ? `<h2 class="scope-h">This recording <span class="num">${n}</span></h2><p class="scope-p">Words this recording found, used or got from you.</p>`
+      : `<h2 class="scope-h">Rest of ${FOLDER} <span class="num">${n}</span></h2><p class="scope-p">Folder words this recording did not use.</p>`;
+  };
+
+  // ---- A
+  function renderA() {
+    const sec = scope => `<section>${scopeHead(scope)}${GROUPS.filter(g => g.scope === scope).map(g => {
+      const list = inGroup(g.id);
+      return `<div class="grp"><h3 class="grp-h"><span class="dot ${g.dot}"></span>${g.name} <span class="n">${list.length}</span></h3><p class="grp-p">${g.desc}</p>
+      <div>${list.map(w => `<div class="row ${groupOf(w)}" data-w="${esc(w.t)}"><div class="w"><b>${esc(w.t)}</b>${tags(w)}<span class="num">${meta(w).join(" · ")}</span></div><div class="act">${actions(w)}</div></div>`).join("") || `<div class="empty">Nothing here.</div>`}</div></div>`;
+    }).join("")}</section>`;
+    return intro() + `<div class="A">${sec("here")}${sec("rest")}</div>`;
+  }
+  // ---- B
+  function renderB() {
+    const sec = scope => `<section>${scopeHead(scope)}<div class="cols">${GROUPS.filter(g => g.scope === scope).map(g => {
+      const list = inGroup(g.id);
+      return `<div class="grp"><h3 class="grp-h"><span class="dot ${g.dot}"></span>${g.name} <span class="n">${list.length}</span></h3><p class="grp-p">${g.desc}</p>
+      <div class="chips">${list.map(w => `<span class="chip ${groupOf(w) === "blocked" ? "blocked" : w.s}" data-w="${esc(w.t)}" title="${esc(meta(w).join(" · "))}"><span>${esc(w.t)}</span>${groupOf(w) === "heard" ? `<span class="cnt">${w.said}×</span>` : ""}${actions(w, true)}</span>`).join("") || `<span class="empty">Nothing here.</span>`}</div></div>`;
+    }).join("")}</div></section>`;
+    return intro() + `<div class="B">${sec("here")}${sec("rest")}</div>`;
+  }
+  // ---- C
+  let filter = "all", query = "";
+  function renderC() {
+    const q = query.trim().toLowerCase();
+    const scopes = filter === "all" ? ["here", "rest"] : [filter];
+    const count = s => words.filter(w => GROUPS.find(g => g.id === groupOf(w)).scope === s).length;
+    const body = scopes.flatMap(s => GROUPS.filter(g => g.scope === s)).map(g => {
+      const list = inGroup(g.id).filter(w => !q || w.t.toLowerCase().includes(q));
+      if (q && !list.length) return "";
+      return `<div class="gh"><span class="scope">${g.scope === "here" ? "This recording" : "Rest of " + FOLDER} · ${g.name}</span><p class="grp-p">${g.desc}</p></div>` +
+        (list.map(w => `<div class="row ${groupOf(w)}" data-w="${esc(w.t)}"><b><span class="dot ${groupOf(w) === "blocked" ? "blocked" : w.s}"></span>${esc(w.t)} ${tags(w)}</b><span class="c2 num">${meta(w)[0]}</span><span class="c3 num">${meta(w)[1] || ""}</span><div class="act">${actions(w)}</div></div>`).join("") || `<div class="row"><span class="empty">Nothing here.</span></div>`);
+    }).join("") || `<div class="gh"><span class="mute">No word matches “${esc(query)}”.</span></div>`;
+    return `<div class="C"><div class="bar"><div class="filters" role="group" aria-label="Show">
+      <button data-f="all" aria-pressed="${filter === "all"}">All <span class="mute num">${words.length}</span></button>
+      <button data-f="here" aria-pressed="${filter === "here"}">This recording <span class="mute num">${count("here")}</span></button>
+      <button data-f="rest" aria-pressed="${filter === "rest"}">Rest of ${FOLDER} <span class="mute num">${count("rest")}</span></button></div>
+    <label class="find">${ic("search")}<input id="find" placeholder="Find a word" aria-label="Find a word" value="${esc(query)}"></label>
+    <div style="flex:1"></div>${addBox()}</div><div class="list">${body}</div></div>`;
+  }
+
+  // ---- behaviour shared by all three
+  let opt = "A", toastTimer, flashWord = null;
+  const panel = document.getElementById("panel");
+  function render() {
+    panel.innerHTML = { A: renderA, B: renderB, C: renderC }[opt]();
+    document.getElementById("tabcount").textContent = words.filter(w => w.s === "active").length;
+    if (flashWord) { panel.querySelector(`[data-w="${CSS.escape(flashWord)}"]`)?.classList.add("flash"); flashWord = null; }
+    const find = document.getElementById("find");
+    if (find) find.oninput = () => { query = find.value; render(); const f = document.getElementById("find"); f.focus(); f.setSelectionRange(f.value.length, f.value.length); };
+  }
+  const byText = t => words.find(w => w.t === t);
+  function toast(msg, undo) {
+    const el = document.getElementById("toast");
+    el.innerHTML = `<span>${msg}</span>${undo ? `<button id="undo">Undo</button>` : ""}`;
+    el.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.hidden = true, 6000);
+    if (undo) document.getElementById("undo").onclick = () => { undo(); el.hidden = true; render(); };
+  }
+  panel.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.f) { filter = b.dataset.f; return render(); }
+    const w = byText(b.dataset.use || b.dataset.remove || b.dataset.restore || ""); if (!w) return;
+    if (b.dataset.use) { w.s = "active"; flashWord = w.t; toast(`${esc(w.t)} is active`); }
+    else if (b.dataset.restore) { w.s = w.prev; flashWord = w.t; toast(`${esc(w.t)} restored`); }
+    else if (w.s === "blocked") {
+      const i = words.indexOf(w); words.splice(i, 1);
+      toast(`${esc(w.t)} removed for good`, () => words.splice(i, 0, w));
+    } else {
+      const was = w.s; w.prev = was; w.s = "blocked";
+      toast(`${esc(w.t)} moved to Blocked`, () => { w.s = was; });
+    }
+    render();
+  });
+  panel.addEventListener("submit", e => {
+    e.preventDefault();
+    const input = document.getElementById("addin"), err = document.getElementById("adderr");
+    const t = input.value.trim().replace(/^[-*\s]+/, "");
+    const fail = m => { err.textContent = m; input.setAttribute("aria-invalid", "true"); input.focus(); };
+    if (!t) return fail("Type a word first.");
+    if (t.length > 120 || /·|%%|^[#>]/.test(t)) return fail("Words can't contain · or %% or start with # or >.");
+    const have = words.find(w => w.t.toLowerCase() === t.toLowerCase());
+    if (have && have.s !== "blocked") { flashWord = have.t; render(); return; }
+    if (have) words.splice(words.indexOf(have), 1);
+    words.push({ t, s: "active", here: "added", src: "yours", recs: 1 });
+    flashWord = t; render(); document.getElementById("addin").focus();
+  });
+  panel.addEventListener("input", e => { if (e.target.id === "addin") { e.target.removeAttribute("aria-invalid"); document.getElementById("adderr").textContent = ""; } });
+  document.getElementById("opts").onclick = e => {
+    const b = e.target.closest("button"); if (!b) return; opt = b.dataset.o;
+    document.querySelectorAll("#opts button").forEach(x => x.setAttribute("aria-pressed", x === b)); render();
+  };
+  document.getElementById("themes").onclick = e => {
+    const b = e.target.closest("button"); if (!b) return;
+    document.documentElement.dataset.theme = b.dataset.t; document.querySelectorAll("#themes button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  };
+  const start = new URLSearchParams(location.search).get("o");
+  if (start) document.querySelector(`#opts [data-o="${start}"]`)?.click(); else render();
+</script>

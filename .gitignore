@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Local audio staging
+audio_inbox/
+*.mp3
+*.wav
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Local models and comparison sheets (contain meeting content)
+models/
+documentation/transcription-comparison.md
+data/
+*.ogg
+.venv-pyannote/
+
+# Local Claude Code & agent/MCP config
+.claude/
+.mcp.json
+GEMINI.md
