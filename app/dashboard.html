@@ -383,13 +383,113 @@
   /* note reading */
   .nbar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding-bottom:12px; border-bottom:1px solid var(--line); font-size:13px; }
   .stale { display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:10px 14px; border-radius:10px; background:var(--acc-soft); margin-top:14px; font-size:13.5px; }
-  .prose { max-width:70ch; font-size:15.5px; line-height:1.7; padding-top:4px; overflow-wrap:anywhere; }
-  .prose h2, .prose h3, .prose h4 { font-family:var(--serif); font-weight:500; line-height:1.3; margin:26px 0 8px; }
-  .prose h2 { font-size:21px; } .prose h3 { font-size:18px; } .prose h4 { font-size:16px; }
-  .prose ul, .prose ol { padding-left:22px; margin:6px 0; } .prose li { margin:5px 0; } .prose li::marker { color:var(--mute); }
-  .prose p { margin:8px 0; }
+  /* ---- note reading view: any blueprint, styled from Markdown structure alone ---- */
+  .prose { max-width:900px; font-size:15.5px; line-height:1.72; padding:6px 0 56px; overflow-wrap:anywhere; }
+  .prose > p:first-child { font-size:13px; color:var(--mute); margin:12px 0 4px; }
+  .prose > :not(.sec, .mmd, .mm, .tablewrap) { max-width:72ch; }
+  .prose h2, .prose h3, .prose h4, .prose h5 { font-family:var(--serif); font-weight:500; line-height:1.3; margin:28px 0 10px; text-wrap:balance; letter-spacing:-.005em; }
+  .prose h2 { font-size:24px; } .prose h3 { font-size:20px; } .prose h4 { font-size:17px; }
+  /* section cards */
+  .prose .sec { margin:16px 0; padding:22px 28px 22px; background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+  .prose .sec > :first-child { margin-top:0; }
+  .prose .sec > :last-child { margin-bottom:0; }
+  .prose .sec > :is(h2, h3, h4):first-child { position:relative; padding-left:16px; font-size:21px; margin-bottom:14px; }
+  .prose .sec > :is(h2, h3, h4):first-child::before { content:""; position:absolute; left:0; top:.18em; bottom:.18em; width:4px; border-radius:2px; background:var(--acc); }
+  .prose .sec > :is(h3, h4, h5):not(:first-child) { font-family:inherit; font-size:11.5px; font-weight:650; letter-spacing:.08em; text-transform:uppercase; color:var(--mute); margin:24px 0 8px; }
+  /* text */
+  .prose p { margin:10px 0; }
+  .prose strong { font-weight:650; }
+  .prose a { color:var(--ink); text-decoration-color:color-mix(in oklch, var(--acc) 45%, transparent); }
+  .prose a:hover { text-decoration-color:var(--acc); }
+  .prose a.wiki { color:var(--acc); text-decoration:none; font-weight:550; }
+  .prose .embed { color:var(--mute); font-size:13px; }
+  .prose mark { background:color-mix(in oklch, var(--acc) 20%, transparent); color:inherit; padding:0 2px; border-radius:3px; box-decoration-break:clone; }
+  .prose mark mark { background:none; }
+  .prose hr { border:0; border-top:1px solid var(--line); margin:24px 0; }
   .prose code { font-size:.86em; background:var(--sunk); padding:1px 5px; border-radius:4px; }
   .prose pre { background:var(--sunk); padding:12px 14px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  .prose pre code { background:none; padding:0; font-size:inherit; }
+  /* lists */
+  .prose ul, .prose ol { padding-left:22px; margin:8px 0; }
+  .prose li { margin:6px 0; padding-left:2px; }
+  .prose li::marker { color:var(--acc); }
+  .prose ol > li::marker { font-weight:650; font-variant-numeric:tabular-nums; }
+  .prose li li::marker { color:var(--mute); }
+  .prose li > ul, .prose li > ol { margin:4px 0 8px; }
+  .prose ul ul { list-style-type:circle; }
+  /* task lists: one row per item, owner in italics shown as a chip */
+  .prose ul:has(> li.task) { padding-left:0; display:grid; gap:6px; }
+  .prose li.task { list-style:none; position:relative; margin:0; padding:9px 14px 9px 42px; border:1px solid var(--line); border-radius:11px; background:var(--bg); line-height:1.6; }
+  .prose li.task input { appearance:none; position:absolute; left:15px; top:13px; width:16px; height:16px; margin:0; padding:0; border:1.5px solid color-mix(in oklch, var(--ink) 35%, transparent); border-radius:5px; background:var(--card); opacity:1; }
+  .prose li.task input:checked { border-color:var(--acc); background:var(--acc); box-shadow:inset 0 0 0 3px var(--card); }
+  .prose li.task.done { color:var(--mute); }
+  .prose li.task em { font-style:normal; font-size:12.5px; font-weight:550; color:var(--ink); padding:1px 8px; border-radius:99px; background:var(--sunk); border:1px solid var(--line); white-space:nowrap; }
+  /* time chips: click to play from there */
+  .prose .ts-chip { display:inline-flex; align-items:center; gap:3px; height:auto; padding:0 7px 0 6px; margin:0 1px; border-radius:99px; border:1px solid color-mix(in oklch, var(--acc) 28%, transparent); background:var(--acc-soft); color:var(--acc); font-size:12px; font-weight:650; line-height:1.55; font-variant-numeric:tabular-nums; vertical-align:1px; cursor:pointer; transition:background .12s, color .12s; }
+  .prose .ts-chip::before { content:""; width:0; height:0; border-left:5px solid currentColor; border-top:3.5px solid transparent; border-bottom:3.5px solid transparent; }
+  .prose .ts-chip:hover { background:var(--acc); color:var(--card); }
+  /* quotes and Obsidian callouts */
+  .prose blockquote { margin:16px 0; padding:4px 0 4px 18px; border-left:3px solid var(--acc); font-family:var(--serif); font-size:16.5px; font-style:italic; color:var(--ink); }
+  .prose blockquote > p { margin:6px 0; }
+  .prose .callout { --c:var(--mute); font-family:inherit; font-size:15px; font-style:normal; padding:12px 18px; border-left-color:var(--c); border-radius:4px 12px 12px 4px; background:color-mix(in oklch, var(--c) 9%, var(--card)); }
+  .prose .callout-title { display:block; font-weight:650; color:var(--c); margin-bottom:2px; }
+  .prose .c-important, .prose .c-warning, .prose .c-caution, .prose .c-attention, .prose .c-danger, .prose .c-bug { --c:var(--acc); }
+  .prose .c-tip, .prose .c-success, .prose .c-check, .prose .c-done { --c:oklch(0.58 0.11 150); }
+  .prose .c-note, .prose .c-info, .prose .c-todo, .prose .c-abstract, .prose .c-summary, .prose .c-tldr { --c:oklch(0.58 0.09 240); }
+  .prose .c-question, .prose .c-help, .prose .c-faq, .prose .c-quote, .prose .c-example { --c:oklch(0.58 0.09 300); }
+  /* tables */
+  .prose .tablewrap { overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+  .prose table { border-collapse:collapse; width:100%; font-size:14px; line-height:1.55; }
+  .prose th, .prose td { padding:9px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); overflow-wrap:normal; min-width:96px; }
+  .prose th { background:var(--sunk); font-size:11.5px; font-weight:650; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); }
+  .prose tbody tr:nth-child(even) td { background:color-mix(in oklch, var(--sunk) 55%, transparent); }
+  .prose tbody tr:last-child td { border-bottom:0; }
+  /* Mermaid diagrams (non mind map) */
+  .prose .mmd { position:relative; margin:16px 0; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+  .prose .mmd > pre { margin:0; border-radius:12px; }
+  .prose .mmd.bad::before { content:"Diagram could not be drawn · shown as text"; display:block; padding:8px 14px 0; font-size:12px; color:var(--mute); }
+  /* mind map: root in the middle, branches split left and right on curved links (drawMindmaps); outline on phones */
+  .prose .mm { position:relative; margin:16px 0; padding:22px; overflow:auto; border:1px solid var(--line); border-radius:14px;
+    background:var(--bg) radial-gradient(color-mix(in oklch, var(--ink) 10%, transparent) 1px, transparent 1.2px) 0 0/18px 18px; }
+  .prose .sec > .mm:first-child { margin-top:0; }
+  .mm ul { list-style:none; margin:0; padding:0; }
+  .mm li { margin:0; padding:0; }
+  .mm .mm-n { --c:oklch(0.6 0.12 var(--h, 60)); }
+  .mm .mm-l { display:inline-block; padding:3px 0; font-size:14px; line-height:1.45; }
+  .mm .mm-k { padding-left:14px; margin:2px 0 6px 6px; border-left:2px solid var(--c); }
+  .mm .mm-tree > .mm-n > .mm-l { padding:8px 16px; border-radius:12px; background:var(--ink); color:var(--bg); font-family:var(--serif); font-size:16px; margin-bottom:6px; }
+  .mm .mm-tree > .mm-n > .mm-k { border-color:var(--line); }
+  .mm .mm-tree > .mm-n > .mm-k > .mm-n > .mm-l { padding:4px 11px; margin:6px 0 2px; border-radius:9px; background:oklch(0.5 0.12 var(--h, 60)); color:white; font-weight:650; }
+  .mm.mapped { padding:0; }
+  .mm.mapped > .mm-tree, .mm:not(.mapped) > .mm-view, .mm:not(.mapped) > .mm-tools { display:none; }
+  .mmap { position:relative; margin:0 auto; }
+  .mmap-links { position:absolute; left:0; top:0; overflow:visible; pointer-events:none; }
+  .mmap-links path { fill:none; stroke:oklch(0.62 0.13 var(--h)); stroke-linecap:round; }
+  .mmap-n { position:absolute; width:max-content; max-width:24ch; font-size:13.5px; line-height:1.38; color:var(--ink); animation:mm-in .35s ease-out both; }
+  .mmap-n.d0 { max-width:15ch; padding:16px 24px; border-radius:20px; background:var(--ink); color:var(--bg); font-family:var(--serif); font-size:19px; line-height:1.25; text-align:center; box-shadow:0 2px 4px oklch(0 0 0 / .08), 0 10px 30px oklch(0 0 0 / .12); }
+  .mmap-n.d1 { max-width:19ch; padding:8px 15px; border-radius:13px; background:oklch(0.5 0.12 var(--h)); color:white; font-size:14.5px; font-weight:650; line-height:1.3; box-shadow:0 1px 2px oklch(0 0 0 / .1), 0 6px 16px oklch(0.4 0.1 var(--h) / .25); cursor:pointer; user-select:none; }
+  .mmap-n.d1:hover { filter:brightness(1.08); }
+  .mmap-n.d1:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+  .mmap-n.d1.closed::after { content:"+" attr(data-n); margin-left:8px; padding:0 6px; border-radius:99px; background:oklch(1 0 0 / .25); font-size:11.5px; }
+  .mmap-n.d2 { padding:2px 3px 3px; border-bottom:2px solid oklch(0.62 0.13 var(--h)); }
+  .mmap-n.d3 { padding:1px 3px 2px; font-size:12.5px; color:var(--mute); border-bottom:1.5px solid oklch(0.62 0.13 var(--h) / .7); }
+  .mm.mapped { overflow:hidden; }
+  .mm-view { max-height:82vh; overflow:auto; padding:20px; cursor:grab; overscroll-behavior:contain; }
+  .mm.panning .mm-view { cursor:grabbing; user-select:none; }
+  .mm:fullscreen .mm-view { flex:1; align-self:stretch; max-height:none; display:flex; align-items:center; }
+  .mm-tools { position:absolute; top:10px; right:10px; z-index:2; display:flex; gap:2px; padding:3px; border:1px solid var(--line); border-radius:10px; background:var(--card); box-shadow:var(--shadow); cursor:default; }
+  .mm-tools button { height:28px; min-width:28px; padding:0 7px; border:0; border-radius:7px; background:none; color:var(--mute); font-size:15px; justify-content:center; }
+  .mm-tools button:hover { background:var(--sunk); color:var(--ink); }
+  .mm-tools .mm-pct { min-width:52px; font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .mm:fullscreen { display:flex; align-items:center; justify-content:center; border:0; border-radius:0; }
+  @keyframes mm-in { from { opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { .mmap-n { animation:none; } }
+  .mmd-scroll { overflow:auto; padding:16px; display:flex; }
+  .mmd-scroll svg { margin:auto; height:auto; flex:none; }
+  .mmd-full { position:absolute; top:8px; right:8px; width:30px; height:30px; padding:0; justify-content:center; font-size:16px; border-radius:8px; background:var(--card); }
+  .mmd:fullscreen { background:var(--bg); border:0; border-radius:0; display:flex; }
+  .mmd:fullscreen .mmd-scroll { flex:1; }
+  .mmd:fullscreen svg { max-width:100%; max-height:100%; width:auto !important; }
 
   /* settings: a right-hand sheet */
   dialog { width:min(960px, 92vw); max-height:86vh; background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:22px; }
@@ -468,6 +568,8 @@
 <dialog id="settings" aria-labelledby="settings-title"></dialog>
 <div class="pop" id="pop" hidden></div>
 <audio id="player" preload="metadata" controls aria-label="Recording audio" hidden></audio>
+<script src="/vendor/markdown-it.min.js"></script>
+<script src="/vendor/markdown-it-mark.min.js"></script>
 <script>
 let S = null, last = "", force = false, stateAt = Date.now();
 const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstChild; };
@@ -507,7 +609,11 @@ function applyTheme() {
   themeBtn.setAttribute("aria-label", themeBtn.title);
 }
 applyTheme();
-themeBtn.onclick = () => { UI.theme = isDark() ? "light" : "dark"; keep(); applyTheme(); };
+const rethemeDiagrams = () => document.querySelectorAll(".prose").forEach(p => {
+  renderDiagrams(p);
+});
+themeBtn.onclick = () => { UI.theme = isDark() ? "light" : "dark"; keep(); applyTheme(); rethemeDiagrams(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (!UI.theme) rethemeDiagrams(); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (!UI.theme) applyTheme(); });
 const pendingFolders = new Set();   // created in the page; saved in the vault when the first recording is moved in
 let addingFolder = false, query = "";
@@ -706,25 +812,259 @@ async function noteText(r, n) {
   }
   return notes[key];
 }
-// ponytail: small Markdown subset (headings, lists, bold, italic, code, wiki links); nested lists render flat
-function md(src) {
-  const inline = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
-    .replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, "$1<i>$2</i>").replace(/==([^=]+)==/g, "<mark>$1</mark>")
-    .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (m, a, b) => b || a)
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
-  const out = []; let list = null, code = null;
-  const close = () => { if (list) { out.push(`</${list}>`); list = null; } };
-  for (const line of src.split(/\r?\n/)) {
-    if (code !== null) { if (/^\s*```/.test(line)) { out.push(`<pre>${esc(code)}</pre>`); code = null; } else code += line + "\n"; continue; }
-    if (/^\s*```/.test(line)) { close(); code = ""; continue; }
-    let m;
-    if ((m = line.match(/^(#{1,6})\s+(.*)/))) { close(); const h = Math.min(m[1].length + 1, 4); out.push(`<h${h}>${inline(m[2])}</h${h}>`); }
-    else if ((m = line.match(/^\s*([-*+]|\d+[.)])\s+(.*)/))) { const t = /\d/.test(m[1]) ? "ol" : "ul"; if (list !== t) { close(); out.push(`<${t}>`); list = t; } out.push(`<li>${inline(m[2])}</li>`); }
-    else if (!line.trim()) close();
-    else { close(); out.push(`<p>${inline(line)}</p>`); }
+// Notes: CommonMark + GFM (markdown-it) with the Obsidian bits notes use: ==mark==, [[wiki links]], - [ ] tasks,
+// > [!type] callouts and ```mermaid diagrams. Raw HTML stays off: note text is LLM/Plaud output going into innerHTML.
+const MD = window.markdownit && (() => {
+  const m = window.markdownit({ html:false, linkify:true, breaks:true, typographer:false }).use(window.markdownitMark);
+  m.inline.ruler.before("link", "wikilink", (s, silent) => {
+    const embed = s.src.startsWith("![[", s.pos), at = s.pos + (embed ? 3 : 2);
+    if (!embed && !s.src.startsWith("[[", s.pos)) return false;
+    const end = s.src.indexOf("]]", at);
+    if (end < 0 || s.src.slice(at, end).includes("\n")) return false;
+    if (!silent) {
+      const [target, alias] = s.src.slice(at, end).split("|");
+      const t = s.push("html_inline", "", 0);
+      t.content = embed ? `<span class="embed">${esc(target)}</span>`
+        : `<a class="wiki" href="${esc(obs(target.split("#")[0]))}">${esc(alias || target)}</a>`;
+    }
+    s.pos = end + 2; return true;
+  });
+  m.core.ruler.push("obsidian", (s) => {
+    const tk = s.tokens, H = (content) => Object.assign(new s.Token("html_inline", "", 0), { content });
+    for (let i = 0; i < tk.length; i++) {
+      const t = tk[i];
+      if (t.type === "heading_open" || t.type === "heading_close") t.tag = "h" + Math.min(+t.tag[1] + 1, 4);
+      if (t.type !== "inline" || tk[i - 1]?.type !== "paragraph_open" || !t.children.length) continue;
+      const first = t.children[0];
+      // - [ ] task / - [x] done
+      const task = tk[i - 2]?.type === "list_item_open" && first.type === "text" && first.content.match(/^\[([ xX])\]\s+/);
+      if (task) {
+        first.content = first.content.slice(task[0].length);
+        tk[i - 2].attrJoin("class", "task" + (task[1] === " " ? "" : " done"));
+        t.children.unshift(H(`<input type="checkbox" disabled${task[1] === " " ? "" : " checked"} aria-label="${task[1] === " " ? "To do" : "Done"}">`));
+      }
+      // > [!note] Title  (first paragraph of a blockquote)
+      const co = tk[i - 2]?.type === "blockquote_open" && first.type === "text" && first.content.match(/^\[!(\w[\w-]*)\][+-]?\s*/);
+      if (co) {
+        const kind = co[1].toLowerCase();
+        first.content = first.content.slice(co[0].length);
+        tk[i - 2].attrJoin("class", `callout c-${kind}`);
+        const br = t.children.findIndex(c => c.type === "softbreak" || c.type === "hardbreak"), end = br < 0 ? t.children.length : br;
+        const untitled = !t.children.slice(0, end).some(c => c.content.trim());
+        t.children.splice(end, br < 0 ? 0 : 1, H(`</span>`));
+        t.children.unshift(H(`<span class="callout-title">${untitled ? esc(kind[0].toUpperCase() + kind.slice(1)) : ""}`));
+      }
+    }
+    // mm:ss / h:mm:ss become chips that play the recording from there (not inside links)
+    for (const t of tk) {
+      if (t.type !== "inline") continue;
+      let inLink = 0;
+      t.children = t.children.flatMap(c => {
+        if (c.type === "link_open") inLink++;
+        if (c.type === "link_close") inLink--;
+        if (inLink) return [c];
+        if (c.type === "code_inline" && /^\d{1,2}:[0-5]\d(:[0-5]\d)?$/.test(c.content)) return [chip(c.content)];
+        if (c.type !== "text" || !TS.test(c.content)) return [c];
+        return c.content.split(TS).map((part, j) => j % 2 ? chip(part) : Object.assign(new s.Token("text", "", 0), { content:part }));
+      });
+    }
+    // each top-level section becomes its own card; --- rules between sections are redundant then
+    const levels = tk.filter(t => t.type === "heading_open" && t.level === 0).map(t => t.markup.length);
+    if (!levels.length) return;
+    const lv = [...new Set(levels)].sort(), top = lv.length > 1 && levels.filter(l => l === lv[0]).length === 1 ? lv[1] : lv[0], out = [], B = (content) => Object.assign(new s.Token("html_block", "", 0), { content });
+    let open = false;
+    for (const t of s.tokens) {
+      if (t.type === "heading_open" && t.level === 0 && t.markup.length === top) {
+        if (out.at(-1)?.type === "hr") out.pop();
+        out.push(B(open ? `</section><section class="sec">` : `<section class="sec">`)); open = true;
+      }
+      out.push(t);
+    }
+    if (open) { if (out.at(-1)?.type === "hr") out.pop(); out.push(B(`</section>`)); }
+    s.tokens = out;
+    function chip(ts) {
+      const sec = ts.split(":").reduce((a, b) => a * 60 + +b, 0);
+      return H(`<button type="button" class="ts-chip" data-seek="${sec}" title="Play the recording from ${ts}">${ts}</button>`);
+    }
+  });
+  const TS = /\b(\d{1,2}:[0-5]\d(?::[0-5]\d)?)\b/;
+  const fence = m.renderer.rules.fence;
+  m.renderer.rules.fence = (tk, i, o, env, self) => {
+    const src = tk[i].content;
+    if (tk[i].info.trim().toLowerCase() !== "mermaid") return fence(tk, i, o, env, self);
+    return mindmapHtml(src, m) ?? `<figure class="mmd" data-src="${esc(src)}"><pre>${esc(src)}</pre></figure>`;
+  };
+  m.renderer.rules.table_open = () => `<div class="tablewrap"><table>`;
+  m.renderer.rules.table_close = () => `</table></div>`;
+  const link = m.renderer.rules.link_open || ((tk, i, o, env, self) => self.renderToken(tk, i, o));
+  m.renderer.rules.link_open = (tk, i, o, env, self) => { tk[i].attrSet("target", "_blank"); tk[i].attrSet("rel", "noopener noreferrer"); return link(tk, i, o, env, self); };
+  return m;
+})();
+const md = (src) => MD ? MD.render(src) : `<pre style="white-space:pre-wrap">${esc(src)}</pre>`;   // libs missing: still readable
+// Mermaid `mindmap` blocks are just an indented outline: draw them as a left-to-right HTML tree so long labels wrap,
+// colours follow the theme, and nothing can fail to parse. Other Mermaid diagrams go to Mermaid itself.
+function mindmapHtml(src, m) {
+  const lines = src.split(/\r?\n/).filter(l => l.trim() && !/^\s*(::icon\(|%%)/.test(l));
+  if (!lines.length || lines[0].trim() !== "mindmap") return null;
+  const root = { k:[] }, stack = [{ ind:-1, n:root }];
+  for (const l of lines.slice(1)) {
+    const ind = l.match(/^\s*/)[0].replace(/\t/g, "  ").length;
+    let t = l.trim().replace(/\s*:::.*$/, "");
+    const shape = t.match(/^[^\s([{)]*?\s*(\(\(|\)\)|\{\{|\(-|\(|\)|\[)(.*?)(\)\)|\(\(|\}\}|-\)|\)|\(|\])$/);
+    if (shape) t = shape[2];
+    t = t.replace(/^"`?|`?"$/g, "");
+    while (stack.at(-1).ind >= ind) stack.pop();
+    const n = { t, k:[] };
+    stack.at(-1).n.k.push(n); stack.push({ ind, n });
   }
-  close(); if (code !== null) out.push(`<pre>${esc(code)}</pre>`);
-  return out.join("");
+  if (!root.k.length) return null;
+  const top = root.k.length === 1 ? root.k[0] : { t:"", k:root.k };
+  const HUES = [38, 240, 150, 300, 75, 200, 340, 110];
+  const node = (n, d, i) => `<li class="mm-n"${d === 1 ? ` style="--h:${HUES[i % HUES.length]}"` : ""}><span class="mm-l">${m.renderInline(n.t)}</span>${
+    n.k.length ? `<ul class="mm-k">${n.k.map((k, j) => node(k, d + 1, j)).join("")}</ul>` : ""}</li>`;
+  return `<figure class="mm" aria-label="Mind map"><ul class="mm-tree">${node(top, 0, 0)}</ul></figure>`;
+}
+
+// Mermaid loads only when a note has a diagram; SVGs are cached per source + theme so redraws are instant.
+let mermaidLib = null, mmdSeq = 0;
+const mmdCache = new Map();
+const loadMermaid = () => mermaidLib ??= new Promise((ok, bad) => {
+  const s = Object.assign(document.createElement("script"), { src:"/vendor/mermaid.min.js", onload:() => ok(window.mermaid), onerror:bad });
+  document.head.append(s);
+});
+async function renderDiagrams(root) {
+  const figs = [...root.querySelectorAll("figure.mmd")];
+  if (!figs.length) return;
+  let mermaid;
+  try { mermaid = await loadMermaid(); } catch { mermaidLib = null; return; }   // stays as a code block
+  const dark = isDark(), theme = dark ? "dark" : "base";
+  mermaid.initialize({ startOnLoad:false, securityLevel:"strict", theme, suppressErrorRendering:true,
+    themeVariables: dark ? {} : { primaryColor:"#f8eee4", primaryBorderColor:"#c46a43", primaryTextColor:"#2b2520", lineColor:"#8b7f74",
+      secondaryColor:"#e9f0f7", tertiaryColor:"#eef5ec", clusterBkg:"#f6f1ea", noteBkgColor:"#fbf3d9" },
+    fontFamily:getComputedStyle(document.body).fontFamily, mindmap:{ useMaxWidth:false, padding:14 }, flowchart:{ useMaxWidth:false } });
+  for (const fig of figs) {
+    const src = fig.dataset.src, key = theme + "\n" + src;
+    if (!mmdCache.has(key)) {
+      const id = "mmd" + ++mmdSeq;
+      try { mmdCache.set(key, (await mermaid.render(id, src)).svg); }
+      catch { mmdCache.set(key, null); document.getElementById("d" + id)?.remove(); document.getElementById(id)?.remove(); }
+    }
+    const svg = mmdCache.get(key);
+    if (!fig.isConnected) continue;
+    if (svg === null) { fig.classList.add("bad"); fig.title = "This diagram has a syntax error, so it is shown as text"; continue; }
+    fig.innerHTML = `<div class="mmd-scroll">${svg}</div><button class="quiet mmd-full" type="button" title="Full screen" aria-label="Show diagram full screen">⤢</button>`;
+    fig.querySelector(".mmd-full").onclick = () => document.fullscreenElement ? document.exitFullscreen() : fig.requestFullscreen?.();
+  }
+}
+
+// Mind maps: draw the outline (from mindmapHtml) as a map. Root in the middle, main branches balanced left/right,
+// curved links, click a branch to fold it. Narrow screens keep the outline.
+const MM_HUES = [38, 240, 150, 300, 75, 200, 340, 110];
+function drawMindmaps(root) {
+  for (const fig of root.querySelectorAll("figure.mm")) {
+    if (fig._mm) continue;
+    const read = (li) => ({ html:li.querySelector(":scope > .mm-l").innerHTML, kids:[...li.querySelectorAll(":scope > ul > li")].map(read), open:true });
+    const tree = read(fig.querySelector(".mm-tree > li"));
+    tree.kids.forEach((k, i) => k.hue = MM_HUES[i % MM_HUES.length]);
+    const map = Object.assign(document.createElement("div"), { className:"mmap" });
+    const view = Object.assign(document.createElement("div"), { className:"mm-view" });
+    view.append(map); fig.append(view);
+    fig.insertAdjacentHTML("beforeend", `<div class="mm-tools" role="toolbar" aria-label="Mind map view">
+      <button type="button" data-z="out" title="Zoom out (Ctrl + scroll)" aria-label="Zoom out">−</button>
+      <button type="button" data-z="fit" class="mm-pct" title="Fit to view" aria-label="Fit to view">100%</button>
+      <button type="button" data-z="in" title="Zoom in (Ctrl + scroll)" aria-label="Zoom in">+</button>
+      <button type="button" data-z="full" title="Full screen" aria-label="Show mind map full screen">⤢</button></div>`);
+    fig._mm = { tree, map, view, w:0, z:null, fit:1 };
+    fig.querySelectorAll("[data-z]").forEach(b => b.onclick = () => {
+      const a = b.dataset.z;
+      if (a === "full") return document.fullscreenElement ? document.exitFullscreen() : fig.requestFullscreen?.();
+      zoomMindmap(fig, a === "fit" ? null : (fig._mm.z ?? fig._mm.fit) * (a === "in" ? 1.25 : 0.8));
+    });
+    // Ctrl/⌘ + wheel (and trackpad pinch) zooms; dragging the canvas pans
+    fig.addEventListener("wheel", (e) => {
+      if (!(e.ctrlKey || e.metaKey) || !fig.classList.contains("mapped")) return;
+      e.preventDefault();
+      zoomMindmap(fig, (fig._mm.z ?? fig._mm.fit) * Math.exp(-e.deltaY * 0.0025), e);
+    }, { passive:false });
+    view.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 || e.target.closest(".mmap-n")) return;
+      const x = e.clientX, y = e.clientY, l = view.scrollLeft, t = view.scrollTop;
+      view.setPointerCapture(e.pointerId); fig.classList.add("panning");
+      view.onpointermove = (m) => { view.scrollLeft = l - (m.clientX - x); view.scrollTop = t - (m.clientY - y); };
+      view.onpointerup = view.onpointercancel = () => { view.onpointermove = null; fig.classList.remove("panning"); };
+    });
+    new ResizeObserver(() => { if (fig.clientWidth !== fig._mm.w) layoutMindmap(fig); }).observe(fig);
+  }
+}
+document.addEventListener("fullscreenchange", () => document.querySelectorAll("figure.mm").forEach(f => f._mm && layoutMindmap(f)));
+function layoutMindmap(fig) {
+  const { tree, map } = fig._mm, full = document.fullscreenElement === fig;
+  const availW = fig.clientWidth - 40, availH = full ? fig.clientHeight - 40 : Infinity;
+  fig._mm.w = fig.clientWidth;
+  fig.classList.toggle("mapped", availW >= 520 || full);
+  if (!fig.classList.contains("mapped") || !fig.isConnected) return;
+  map.style.zoom = 1; map.innerHTML = "";
+  const all = [], vis = (n) => n.open ? n.kids : [];
+  (function make(n, d, hue) {
+    Object.assign(n, { d, hue });
+    const el = n.el = document.createElement("div");
+    el.className = `mmap-n d${Math.min(d, 3)}${n.kids.length && !n.open ? " closed" : ""}`;
+    el.style.setProperty("--h", hue ?? 60);
+    el.innerHTML = n.html;
+    if (d === 1 && n.kids.length) {
+      Object.assign(el, { tabIndex:0, title:n.open ? "Fold this branch" : "Unfold this branch" });
+      el.setAttribute("role", "button"); el.setAttribute("aria-expanded", n.open); el.dataset.n = n.kids.length;
+      el.onclick = (e) => { if (!e.target.closest("[data-seek]")) { n.open = !n.open; layoutMindmap(fig); } };
+      el.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); } };
+    }
+    map.append(el); all.push(n);
+    vis(n).forEach(k => make(k, d + 1, k.hue ?? hue));
+  })(tree, 0, null);
+  for (const n of all) { n.w = n.el.offsetWidth; n.h = n.el.offsetHeight; }
+  const GAP = [0, 26, 10, 6], HG = (d) => d === 0 ? 56 : 34;
+  const H = (n) => n.H = Math.max(n.h, vis(n).reduce((s, k) => s + H(k), 0) + (GAP[Math.min(n.d + 1, 3)]) * Math.max(0, vis(n).length - 1));
+  H(tree);
+  // balance the main branches by height: first ones go right (clockwise from the top), the rest left
+  const total = tree.kids.reduce((s, k) => s + k.H, 0);
+  let acc = 0; const right = [], left = [];
+  for (const k of tree.kids) (right.length && acc + k.H / 2 > total / 2 ? left : right).push(k), acc += k.H;
+  const place = (n, x, top, dir) => {
+    n.x = dir > 0 ? x : x - n.w; n.y = top + n.H / 2; n.dir = dir;
+    const ks = vis(n), gap = GAP[Math.min(n.d + 1, 3)];
+    let t = top + (n.H - (ks.reduce((s, k) => s + k.H, 0) + gap * (ks.length - 1))) / 2;
+    for (const k of ks) { place(k, dir > 0 ? n.x + n.w + HG(n.d) : n.x - HG(n.d), t, dir); t += k.H + gap; }
+  };
+  tree.x = -tree.w / 2; tree.y = 0;
+  for (const [side, dir] of [[right, 1], [left.reverse(), -1]]) {
+    let t = -(side.reduce((s, k) => s + k.H, 0) + GAP[1] * (side.length - 1)) / 2;
+    for (const k of side) { place(k, dir > 0 ? tree.w / 2 + HG(0) : -tree.w / 2 - HG(0), t, dir); t += k.H + GAP[1]; }
+  }
+  const PAD = 30, minX = Math.min(...all.map(n => n.x)) - PAD, minY = Math.min(...all.map(n => n.y - n.h / 2)) - PAD;
+  const W = Math.max(...all.map(n => n.x + n.w)) - minX + PAD, Ht = Math.max(...all.map(n => n.y + n.h / 2)) - minY + PAD;
+  const anchorY = (n) => n.d >= 2 ? n.y + n.h / 2 - 1 : n.y;   // underlined labels connect at the underline
+  const paths = all.flatMap(p => vis(p).map(k => {
+    const x1 = (k.dir > 0 ? p.x + p.w : p.x) - minX, y1 = anchorY(p) - minY, x2 = (k.dir > 0 ? k.x : k.x + k.w) - minX, y2 = anchorY(k) - minY;
+    const mx = (x1 + x2) / 2;
+    return `<path style="--h:${k.hue}" stroke-width="${[0, 4, 2.2, 1.6][Math.min(k.d, 3)]}" d="M${x1} ${y1}C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}"/>`;
+  })).join("");
+  map.insertAdjacentHTML("afterbegin", `<svg class="mmap-links" width="${W}" height="${Ht}" aria-hidden="true">${paths}</svg>`);
+  for (const n of all) { n.el.style.left = n.x - minX + "px"; n.el.style.top = n.y - n.h / 2 - minY + "px"; }
+  Object.assign(map.style, { width:W + "px", height:Ht + "px" });
+  // fit: shrink to the box (never below 70%, then it scrolls); full screen may also enlarge a little
+  fig._mm.fit = full ? Math.min(availW / W, availH / Ht, 1.4) : Math.max(Math.min(1, availW / W), 0.7);
+  zoomMindmap(fig, fig._mm.z);
+}
+// z = null means "fit"; keeps the point under the cursor (or the view centre) in place
+function zoomMindmap(fig, z, at) {
+  const mm = fig._mm, map = mm.map, view = mm.view, old = +map.style.zoom || 1;
+  mm.z = z === null ? null : Math.min(3, Math.max(0.25, z));
+  const nz = mm.z ?? mm.fit, r = view.getBoundingClientRect();
+  const px = at ? at.clientX - r.left : view.clientWidth / 2, py = at ? at.clientY - r.top : view.clientHeight / 2;
+  const cx = (view.scrollLeft + px) / old, cy = (view.scrollTop + py) / old;
+  map.style.zoom = nz;
+  view.scrollLeft = cx * nz - px; view.scrollTop = cy * nz - py;
+  fig.querySelector(".mm-pct").textContent = Math.round(nz * 100) + "%";
+  fig.querySelector(".mm-pct").title = mm.z === null ? "Fitted to view" : "Fit to view";
 }
 
 // ---- main view ----
@@ -807,7 +1147,21 @@ async function renderView() {
     panel.querySelector(".regen")?.addEventListener("click", () => post("/api/regenerate", { id:r.id, file:n.file }));
     if (!n.missing) {
       const text = await noteText(r, n);
-      if (UI.rec === r.id && UI.tab === n.file && panel.isConnected) panel.querySelector(".prose").innerHTML = text === null ? `<p class="err">Could not read this note.</p>` : md(text);
+      if (UI.rec === r.id && UI.tab === n.file && panel.isConnected) {
+        const prose = panel.querySelector(".prose");
+        prose.innerHTML = text === null ? `<p class="err">Could not read this note.</p>` : md(text);
+        // a clock time ("alle 14:00") past the end of the recording is not a timestamp
+        if (d?.duration_s) prose.querySelectorAll("[data-seek]").forEach(b => { if (+b.dataset.seek > d.duration_s + 1) b.replaceWith(b.textContent); });
+        renderDiagrams(prose); drawMindmaps(prose);
+        prose.addEventListener("click", (e) => {
+          const b = e.target.closest("[data-seek]");
+          if (!b) return;
+          if (playerRec !== r.id) { player.src = `/api/audio/${r.id}`; playerRec = r.id; }
+          if (player.hidden) { panel.querySelector(".nbar").after(player); player.hidden = false; }
+          queue = []; stopAt = null; player.currentTime = +b.dataset.seek;
+          player.play().catch(err => { document.getElementById("err").textContent = err.message; });
+        });
+      }
     }
   }
 }

@@ -421,6 +421,15 @@ def favicon():
     return FileResponse(Path(__file__).parent / "favicon.svg", media_type="image/svg+xml")
 
 
+@app.get("/vendor/{name}")
+def vendor(name: str):
+    """Pinned third-party scripts for the dashboard (markdown-it, Mermaid), served locally so it works offline."""
+    path = Path(__file__).parent / "vendor" / Path(name).name
+    if not path.is_file():
+        raise HTTPException(404, "not found")
+    return FileResponse(path, media_type="text/javascript", headers={"Cache-Control": "max-age=86400"})
+
+
 @app.get("/api/state")
 def state():
     recs = []
